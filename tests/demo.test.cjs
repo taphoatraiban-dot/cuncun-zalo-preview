@@ -1,0 +1,12 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const html=fs.readFileSync('index.html','utf8');
+const script=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+test('Demo has valid JavaScript',()=>{assert.ok(script);new vm.Script(script)});
+test('Demo is clearly labeled as disconnected from real Zalo',()=>{assert.match(html,/Chưa kết nối/);assert.match(html,/không đọc, gửi hoặc đồng bộ với Zalo thật/)});
+test('Composer supports local-only sending',()=>{assert.match(html,/id="demoCompose"/);assert.match(script,/event\.preventDefault\(\)/);assert.match(script,/chat\.messages\.push/);assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/)});
+test('Drafts are isolated by chat',()=>{assert.match(script,/const drafts=new Map\(\)/);assert.match(script,/drafts\.set\(draftChat/);assert.match(script,/drafts\.get\(next\)/)});
+test('Selection, copy and deletion remain available',()=>{for(const id of ['select','all','copy','delete'])assert.match(html,new RegExp('id="'+id+'"'));assert.match(script,/navigator\.clipboard/);assert.match(script,/confirm\('Xóa '/)});
+test('No persistent browser storage is used',()=>{assert.doesNotMatch(script,/localStorage|sessionStorage|indexedDB|document\.cookie/)});
