@@ -131,20 +131,20 @@ $('previewPaste').onclick=()=>{
 $('pasteExample').onclick=()=>{
  $('pasteCustomer').value='Khách thử nghiệm';$('pastePrice').value='Khách vãng lai';$('pasteRegion').value='Miền Nam';
  $('pasteText').value='2dmn\n12.21b5.\n34.43da1.';
- $('pastePreview').classList.add('hidden');
+ $('pastePreview').classList.add('hidden');$('pasteConfirmed').checked=false;$('copyPaste').disabled=true;
  status('Đã điền dữ liệu giả lập. Hãy bấm Xem trước để kiểm tra');
 };
 $('clearPaste').onclick=()=>{
  $('pasteText').value='';$('pasteCustomer').value='';$('pastePrice').value='';$('pasteRegion').value='';
  $('previewText').textContent='';$('previewCustomer').textContent='';
- $('pastePreview').classList.add('hidden');status('Đã xóa nội dung dán khỏi trang demo');
+ $('pastePreview').classList.add('hidden');$('pasteConfirmed').checked=false;$('copyPaste').disabled=true;status('Đã xóa nội dung dán khỏi trang demo');
 };
 $('pasteConfirmed').onchange=()=>{$('copyPaste').disabled=!$('pasteConfirmed').checked||$('pastePreview').classList.contains('hidden')};
 $('pasteText').oninput=$('pasteCustomer').oninput=$('pastePrice').onchange=$('pasteRegion').onchange=()=>{
  $('pasteConfirmed').checked=false;$('copyPaste').disabled=true;
  $('previewText').textContent='';$('previewCustomer').textContent='';
 
- $('pastePreview').classList.add('hidden');
+ $('pastePreview').classList.add('hidden');$('pasteConfirmed').checked=false;$('copyPaste').disabled=true;
 };
 $('copyPaste').onclick=async()=>{
  if($('pastePreview').classList.contains('hidden')||!$('pasteConfirmed').checked)return;
