@@ -57,7 +57,20 @@ $('import').onclick=()=>{
  $('importText').value=text;$('importPanel').classList.remove('hidden');
  status('Đã đưa '+selected.size+' tin mẫu vào ô thử; chưa chuyển sang CUNCUN');
 };
-$('copyImport').onclick=()=>{if(!$('importText').value)return;$('copy').click()};
+$('copyImport').onclick=async()=>{
+ const field=$('importText'),text=field.value;
+ if(!text)return;
+ try{
+  if(!navigator.clipboard?.writeText)throw new Error('Clipboard unavailable');
+  await navigator.clipboard.writeText(text);
+  status('Đã sao chép nội dung ô thử');
+ }catch{
+  field.focus();field.select();field.setSelectionRange(0,field.value.length);
+  let copied=false;
+  try{copied=document.execCommand('copy')}catch{}
+  status(copied?'Đã sao chép nội dung ô thử':'Không thể sao chép tự động. Hãy chạm giữ ô nội dung và chọn Sao chép.');
+ }
+};
 $('closeImport').onclick=()=>{$('importText').value='';$('importPanel').classList.add('hidden')};
 // Keep preview contents synchronized when the user changes selected messages.
 function syncImportPreview(){
